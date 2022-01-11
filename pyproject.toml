@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "ubidots-bleach"
+version = "4.1.0"
+description = "Bleach is an allowed-list-based HTML sanitizing library that escapes or strips markup and attributes."
+packages = [
+  { include = "bleach" },
+]
+authors = ["Ubidots"]
+
+
+[tool.poetry.dependencies]
+python = "^3.9.7"
+six = "^1.16.0"
+webencodings = "^0.5.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+black = "^21.11b1"
+
+[tool.black]
+line-length = 100
+exclude = '''
+/(
+  | .history/*
+  | __pycache__
+)/
+'''

@@ -17,3 +17,5 @@ docs/_build/
 __pycache__
 venv/
 .idea/
+.history
+.vscode
