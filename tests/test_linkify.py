@@ -48,7 +48,7 @@ def test_mangle_link():
     def filter_url(attrs, new=False):
         if not attrs.get((None, "href"), "").startswith("http://bouncer"):
             quoted = quote_plus(attrs[(None, "href")])
-            attrs[(None, "href")] = "http://bouncer/?u={0!s}".format(quoted)
+            attrs[(None, "href")] = "http://bouncer/?u={!s}".format(quoted)
         return attrs
 
     assert (
@@ -662,9 +662,20 @@ def test_recognized_tags_arg():
     )
 
 
-def test_linkify_idempotent():
-    dirty = "<span>invalid & </span> < extra http://link.com<em>"
-    assert linkify(linkify(dirty)) == linkify(dirty)
+@pytest.mark.parametrize(
+    "data",
+    [
+        "<span>text & </span>",
+        "a < b",
+        "link http://link.com",
+        "text<em>",
+        "jim &current joe",
+        # Link with querystring items
+        '<a href="http://example.com?foo=bar&bar=foo&amp;biz=bash">',
+    ],
+)
+def test_linkify_idempotent(data):
+    assert linkify(linkify(data)) == linkify(data)
 
 
 class TestLinkify:

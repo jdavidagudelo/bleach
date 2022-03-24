@@ -11,17 +11,30 @@ MODE=${1:-test}
 
 case "${MODE}" in
   test)
-    pytest ;;
+    pytest
+    ;;
   lint)
-    flake8 bleach/ ;;
+    flake8 setup.py tests/ bleach/ tests_website/
+    ;;
   vendorverify)
-    ./scripts/vendor_verify.sh ;;
+    ./scripts/vendor_verify.sh
+    ;;
   docs)
-    tox -e docs ;;
+    tox -e docs
+    ;;
   format)
-    black --target-version=py36 bleach/*.py tests/ tests_website/ ;;
+    black --target-version=py37 --exclude=_vendor setup.py bleach/ tests/ tests_website/
+    ;;
   format-check)
-    black --target-version=py36 --check --diff bleach/*.py tests/ tests_website/ ;;
+    black --target-version=py37 --check --diff --exclude=_vendor setup.py bleach/ tests/ tests_website/
+    ;;
+  check-reqs)
+    python -m venv ./tmpvenv/
+    ./tmpvenv/bin/pip install -U pip
+    ./tmpvenv/bin/install '.[dev]'
+    ./tmpvenv/bin/pip list -o
+    rm -rf ./tmpvenv/
+    ;;
   *)
     echo "Unknown mode $MODE."
     exit 1
